@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="vector">
+    <file>icons/open_file.svg</file>
+    <file>icons/save_file.svg</file>
+  </qresource>
+</RCC>
