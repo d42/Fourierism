@@ -15,8 +15,30 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
     <item>
-     <widget class="QMdiArea" name="mdiArea"/>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -33,7 +55,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_open_File"/>
+    <addaction name="action_open_file"/>
     <addaction name="action_save_file"/>
     <addaction name="action_save_as"/>
    </widget>
@@ -56,10 +78,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_open_File"/>
+   <addaction name="action_open_file"/>
    <addaction name="action_save_file"/>
   </widget>
-  <action name="action_open_File">
+  <action name="action_open_file">
    <property name="icon">
     <iconset>
      <normalon>:/vector/icons/open_file.svg</normalon>
