@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="vector">
+    <file>icons/show_histogram.svg</file>
+    <file>icons/show_fourier.svg</file>
     <file>icons/open_file.svg</file>
     <file>icons/save_file.svg</file>
   </qresource>

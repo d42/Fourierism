@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FourierWindow</class>
+ <widget class="QMainWindow" name="FourierWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>280</width>
+    <height>326</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="Fourier" name="fourier" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>280</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDerp">
+    <property name="title">
+     <string>Fourier</string>
+    </property>
+    <addaction name="action_restore"/>
+    <addaction name="action_update"/>
+   </widget>
+   <widget class="QMenu" name="menuHerp">
+    <property name="title">
+     <string>Effects</string>
+    </property>
+    <widget class="QMenu" name="menuFIlter">
+     <property name="title">
+      <string>FIlter</string>
+     </property>
+     <addaction name="action_high_pass"/>
+     <addaction name="action_low_pass"/>
+     <addaction name="action_band_pass"/>
+    </widget>
+    <widget class="QMenu" name="menuNoise">
+     <property name="title">
+      <string>Noise</string>
+     </property>
+     <addaction name="action_noise_lines"/>
+    </widget>
+    <addaction name="menuFIlter"/>
+    <addaction name="menuNoise"/>
+   </widget>
+   <addaction name="menuDerp"/>
+   <addaction name="menuHerp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="action_high_pass">
+   <property name="text">
+    <string>High pass</string>
+   </property>
+  </action>
+  <action name="action_low_pass">
+   <property name="text">
+    <string>Low pass</string>
+   </property>
+  </action>
+  <action name="action_band_pass">
+   <property name="text">
+    <string>Band pass</string>
+   </property>
+  </action>
+  <action name="action_restore">
+   <property name="text">
+    <string>Restore</string>
+   </property>
+  </action>
+  <action name="action_update">
+   <property name="text">
+    <string>Update</string>
+   </property>
+  </action>
+  <action name="action_noise_lines">
+   <property name="text">
+    <string>Lines</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Fourier</class>
+   <extends>QWidget</extends>
+   <header location="global">ui.widgets.fourier</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

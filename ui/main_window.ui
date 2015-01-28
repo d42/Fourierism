@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>450</height>
+    <width>589</width>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Fourierism</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -47,7 +47,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>582</width>
+     <width>589</width>
      <height>20</height>
     </rect>
    </property>
@@ -59,9 +59,27 @@
     <addaction name="action_save_file"/>
     <addaction name="action_save_as"/>
    </widget>
+   <widget class="QMenu" name="menuFourier">
+    <property name="title">
+     <string>Fourier</string>
+    </property>
+    <addaction name="action_show_fourier"/>
+   </widget>
+   <widget class="QMenu" name="menuHistogram">
+    <property name="title">
+     <string>Histogram</string>
+    </property>
+    <addaction name="action_show_histogram"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuFourier"/>
+   <addaction name="menuHistogram"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
@@ -80,6 +98,9 @@
    </attribute>
    <addaction name="action_open_file"/>
    <addaction name="action_save_file"/>
+   <addaction name="separator"/>
+   <addaction name="action_show_histogram"/>
+   <addaction name="action_show_fourier"/>
   </widget>
   <action name="action_open_file">
    <property name="icon">
@@ -105,9 +126,65 @@
     <string>Save &amp;as</string>
    </property>
   </action>
+  <action name="action_toggle_sidebar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Toggle Sidebar</string>
+   </property>
+  </action>
+  <action name="action_show_fourier">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/show_fourier.svg</normaloff>:/vector/icons/show_fourier.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Show Fourier</string>
+   </property>
+  </action>
+  <action name="action_show_histogram">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/show_histogram.svg</normaloff>:/vector/icons/show_histogram.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Show Histogram</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../res/icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>mdiArea</sender>
+   <signal>subWindowActivated(QMdiSubWindow*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_subwindow_change(QMdiSubWindow*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>336</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>-3</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>on_subwindow_change(QMdiSubWindow*)</slot>
+  <slot>on_fourier_update(QObject*)</slot>
+ </slots>
 </ui>
