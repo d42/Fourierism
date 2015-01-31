@@ -1,17 +1,20 @@
+from itertools import product
+import logging
 
 import numpy as np
-from PySide.QtGui import QWidget, QPixmap, QPainter, QImage, QCursor, QColor, QDialog, QGraphicsOpacityEffect
+import matplotlib.pyplot as plt
+
+from PySide.QtGui import QWidget, QPixmap, QPainter, QImage, QCursor, QColor, QDialog, QGraphicsOpacityEffect, QLabel
 from PySide.QtCore import Qt, Signal, Slot, QRect
+from PySide.QtSvg import QSvgRenderer
+
 
 from ui.widgets.color_widget import ColorWidget
 from utils import (array_to_image, image_to_array, rescale_array,
-                   array_to_fft, fft_to_array)
+                   array_to_fft, fft_to_array, zeropad)
 
 
-from itertools import product
-import matplotlib.pyplot as plt
-import logging
-
+#magic_wand = QSvgRenderer(":cursors/magic_wand.svg")
 
 class Overlay(QWidget):
     mask = None
@@ -24,7 +27,7 @@ class Overlay(QWidget):
         self.setGraphicsEffect(self.effect)
 
     def paintEvent(self, event):
-        if self.mask is None:
+        if not self.mask:
             return
 
         h, w = self.mask.shape
@@ -39,6 +42,7 @@ class Overlay(QWidget):
     @Slot()
     def clear(self):
         self.set(np.zeros((self.height(), self.width())))
+        self.mask = None
 
     @Slot(np.ndarray)
     def set(self, mask):
@@ -47,12 +51,16 @@ class Overlay(QWidget):
 
 
 class Fourier(QWidget):
+    """ Actual fourier display and drawing widget """
 
     fourier_updated = Signal(np.ndarray)
     image = None
     pressed = False
     scale_factor = None
     color = QColor(0, 0, 0)
+    raw_fourier = None
+    x_sym = False
+    y_sym = False
     # signal fourier updated
 
     def __init__(self, parent=None):
@@ -60,26 +68,30 @@ class Fourier(QWidget):
         self.update_cursor('square', 20)
         self.overlay = Overlay(self)
 
-    def emit_fourier(self):
-        fc = self.raw_fourier.copy()
-
     def update_image(self, fft_array, factor=None):
         logging.info("updating fourier image")
         self.scale_factor = factor or np.max(fft_array.flat)
         scaled_values = rescale_array(fft_array, self.scale_factor)
         self.image = array_to_image(scaled_values, real=True)
         self.overlay.resize(self.image.size())
+        self.update()
+        self.updateGeometry()
 
-    def update_fourier(self, image_array):
+    def update_fourier(self, image_array, flush=False):
+        if flush:
+            self.original = None
+            self.raw_fourier = None
+
         logging.info("updating raw fourier")
-        self.raw_fourier = array_to_fft(image_array)
+        f = array_to_fft(image_array)
+        if self.raw_fourier is None:
+            self.original = f.copy()
+        self.raw_fourier = f
         self.update_image(self.raw_fourier)
-        #self.on_action_low_pass()
-        # plt.imshow(self.raw_fourier.astype(np.ubyte))
-        # plt.show()
 
     def update_cursor(self, shape, size):
         self.cursor_size = size
+        self.shape = shape
 
         cursor_pix = QPixmap(size, size)
         cursor_pix.fill(Qt.transparent)
@@ -91,30 +103,65 @@ class Fourier(QWidget):
             painter.drawEllipse(0, 0, size-1, size-1)
         elif shape == 'square':
             painter.drawRect(0, 0, size-1, size-1)
-
-        del painter
+        elif shape == "magic wand":
+            magic_wand.render(painter, QRect(0, 0, 20, 20))
 
         cursor = QCursor(cursor_pix, 0, 0)
         self.setCursor(cursor)
+        del painter
 
     def on_size_change(self, size):
         """ Brush size changed """
-        self.size = size
-        self.update_cursor(self.shape, self.size)
+        self.cursor_size = size
+        self.update_cursor(self.shape, self.cursor_size)
 
+    Slot(str)
     def on_shape_change(self, shape):
         """ Brush shape changed """
         self.shape = shape
-        self.update_cursor(self.shape, self.size)
+        self.update_cursor(self.shape, self.cursor_size)
+
+    def on_color_change(self, color):
+        self.color = QColor(color, color, color)
+
+
+    def emit_fourier(self):
+        array = fft_to_array(self.raw_fourier)
+        self.fourier_updated.emit(array)
+
+    def on_restore(self):
+        self.raw_fourier = self.original.copy()
+        self.update_image(self.raw_fourier, self.scale_factor)
+        #self.fourier_updated.emit(self.raw_fourier.copy())
+        self.emit_fourier()
+
+    def on_resize(self, factor):
+        if factor == 1.0: return
+        #even = lambda x: x if (x % 2 == 0) else x + 1
+        array = self.raw_fourier
+
+        reshape = lambda x_y: [int(factor * x_y[0]), int(factor * x_y[1])]
+        diff = lambda x_y: [x_y[0] - array.shape[0], x_y[1] - array.shape[1]]
+        nexteven = lambda x: x if (x % 2 == 0) else x + 1
+        delta = map(nexteven, diff(reshape(array.shape)))
+        newsize = tuple(x[0] + x[1] for x in zip(array.shape, delta))
+
+        self.raw_fourier = zeropad(array, newsize)
+        self.update_image(self.raw_fourier, self.scale_factor)
+        #self.fourier_updated.emit(self.raw_fourier.copy())
+        self.emit_fourier()
 
     def draw_mask_on_fourier(self, mask, value=0x00):
         self.raw_fourier[mask] = value
         self.update_image(self.raw_fourier, self.scale_factor)
-        self.fourier_updated.emit(self.raw_fourier.copy())
+        self.emit_fourier()
+
+    def regen_image(self):
+        self.update_image(self.raw_fourier, self.scale_factor)
 
     def paintEvent(self, event):
         """ Paint widget as self.image content """
-        if not self.image:
+        if self.image is None:
             super().paintEvent(event)
             return
 
@@ -124,8 +171,9 @@ class Fourier(QWidget):
 
     def mousePressEvent(self, event):
         self.pressed = True
-        self.draw_buffer = np.empty(self.raw_fourier.shape)
-        self.draw_buffer.fill(-1)
+        self.draw_buffer = QPixmap(self.image.size())
+        color = self.color.red() ^ 0xAA
+        self.draw_buffer.fill(QColor(color, color, color))
         self.draw(event)
 
     def mouseReleaseEvent(self, event):
@@ -138,24 +186,51 @@ class Fourier(QWidget):
             self.draw(event)
 
     def fourier_draw(self):
-        values = (self.draw_buffer[self.draw_buffer != -1]/255) * self.scale_factor
-        self.raw_fourier[self.draw_buffer != -1] = values
-        self.fourier_updated.emit(self.raw_fourier.copy())
+
+        arr = image_to_array(self.draw_buffer.toImage())
+
+        values = arr[arr == self.color.red()] * (self.scale_factor/255)
+        self.raw_fourier[arr == self.color.red()] = np.abs(values)
+        self.emit_fourier()
+
+    def _paint(self, painter, x, y):
+        size = self.cursor_size
+        shape = self.shape
+
+        painter.setBrush(self.color)
+        painter.setPen(Qt.NoPen)
+
+        if shape == 'circle':
+            painter.drawEllipse(x, y, size-1, size-1)
+        elif shape == 'square':
+            painter.drawRect(x, y, size-1, size-1)
+        elif shape == "magic wand":
+            magic_wand.render(painter, QRect(0, 0, 20, 20))
 
     def draw(self, event):
         x, y = event.x(), event.y()
-        rect = QRect(x, y, self.cursor_size - 1, self.cursor_size - 1)
-        painter = QPainter(self.image)
+        max_y, max_x = self.raw_fourier.shape
 
-        painter.fillRect(rect, self.color)
-        del painter
+        for painter in map(QPainter, [self.image, self.draw_buffer]):
+            self._paint(painter, x, y)
+            if self.x_sym:
+                self._paint(painter, abs(max_x - x), y)
+            if self.y_sym:
+                self._paint(painter, x, abs(max_y - y))
+            if self.x_sym and self.y_sym:
+                self._paint(painter, abs(max_x - x), abs(max_y - y))
+
+            del painter
+
         self.update()
-
-        cs = self.cursor_size
-        self.draw_buffer[y:y+cs, x:x+cs] = self.color.red()
 
     def sizeHint(self):
         if not self.image:
             return super().minimumSizeHint()
-
         return self.image.size()
+
+    def on_y_toggle(self, y_state):
+        self.y_sym = y_state
+
+    def on_x_toggle(self, x_state):
+        self.x_sym = x_state

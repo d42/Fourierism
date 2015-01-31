@@ -4,5 +4,9 @@
     <file>icons/show_fourier.svg</file>
     <file>icons/open_file.svg</file>
     <file>icons/save_file.svg</file>
+    <file>cursors/magic_wand.svg</file>
+  </qresource>
+  <qresource prefix="misc">
+    <file>noise.png</file>
   </qresource>
 </RCC>

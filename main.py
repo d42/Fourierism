@@ -8,7 +8,7 @@ def main():
 
     path = sys.argv[1] if len(sys.argv) > 1 else None
     main = MainWindow()
-    main.show()
+    main.showMaximized()
     if path:
         main.open_file(path)
 

@@ -2,6 +2,7 @@ import os
 from collections import OrderedDict, namedtuple
 
 from PySide import QtGui, QtCore
+from PySide.QtCore import Qt
 from PySide.QtGui import (QMainWindow, QFileDialog, QMdiSubWindow,
                           QImage, QLabel, QPixmap, QToolButton)
 
@@ -14,6 +15,8 @@ ImageWindows = namedtuple('ImageWindows', ['image', 'fourier', 'histogram'])
 
 
 def current_window(get_parent_image=True):
+    """ funky decorator to pass current window/parent
+        of the current window as a first argument """
 
     def deco(func):
 
@@ -30,6 +33,7 @@ def current_window(get_parent_image=True):
 
 
 class MainWindow(QMainWindow):
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.ui = Ui_MainWindow()
@@ -47,6 +51,12 @@ class MainWindow(QMainWindow):
         file_path, filter = QFileDialog.getOpenFileName()
         self.open_file(file_path)
 
+    def maybe_save(self):
+        pass
+
+    def on_save_file(self):
+        pass
+
     def open_file(self, file_path):
         title = os.path.basename(file_path)
         image = ImageWidget()
@@ -58,9 +68,20 @@ class MainWindow(QMainWindow):
         fourier.fourier_updated.connect(image.from_fourier)
         image.load_file(file_path)
 
+        flags= Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint
         mdi_image = self.ui.mdiArea.addSubWindow(image)
-        mdi_histogram = self.ui.mdiArea.addSubWindow(histogram)
-        mdi_fourier = self.ui.mdiArea.addSubWindow(fourier)
+        mdi_histogram = self.ui.mdiArea.addSubWindow(histogram, flags)
+        mdi_fourier = self.ui.mdiArea.addSubWindow(fourier, flags)
+
+        def close(event):
+            self.ui.action_show_fourier.setChecked(False)
+            self.ui.action_show_histogram.setChecked(False)
+            mdi_fourier.close()
+            mdi_histogram.close()
+
+
+
+        image.closeEvent = close
 
         mdi_image.mdi_fourier = mdi_fourier
         mdi_image.mdi_histogram = mdi_histogram
@@ -84,9 +105,6 @@ class MainWindow(QMainWindow):
     def action_toggle_fourier(self, window, state):
         window.mdi_fourier.setVisible(state)
         window.mdi_fourier.resize(window.mdi_fourier.sizeHint())
-
-    def on_fourier_update(self, ftt_array):
-        print("PENIS PENIS PENIS")
 
     def on_subwindow_change(self, window):
         if not window:  # Apparently i can't select no window as a normal

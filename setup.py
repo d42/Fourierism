@@ -4,6 +4,11 @@ from esky.bdist_esky import Executable
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 buildOptions = dict(
+    includes = ['ui', 'scipy.special._ufuncs_cxx',
+        'matplotlib.backends.backend_qt4agg',
+        'scipy.sparse.csgraph._validation', 'pyqtgraph', 'pyqtgraph.graphicsItems.BarGraphItem',
+        'scipy.integrate.vode', 'scipy.integrate.lsoda'],
+    excludes = ['tornado', 'IPython', 'PyQt5', 'webbrowser'],
     freezer_module="cx_freeze"
 )
 

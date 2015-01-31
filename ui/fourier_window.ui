@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>326</height>
+    <width>525</width>
+    <height>545</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,8 +50,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>280</width>
-     <height>20</height>
+     <width>525</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDerp">
@@ -59,31 +59,25 @@
      <string>Fourier</string>
     </property>
     <addaction name="action_restore"/>
+    <addaction name="action_resize"/>
     <addaction name="action_update"/>
    </widget>
-   <widget class="QMenu" name="menuHerp">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Effects</string>
+     <string>File</string>
     </property>
-    <widget class="QMenu" name="menuFIlter">
-     <property name="title">
-      <string>FIlter</string>
-     </property>
-     <addaction name="action_high_pass"/>
-     <addaction name="action_low_pass"/>
-     <addaction name="action_band_pass"/>
-    </widget>
-    <widget class="QMenu" name="menuNoise">
-     <property name="title">
-      <string>Noise</string>
-     </property>
-     <addaction name="action_noise_lines"/>
-    </widget>
-    <addaction name="menuFIlter"/>
-    <addaction name="menuNoise"/>
+    <addaction name="action_save_as"/>
    </widget>
+   <widget class="QMenu" name="menuFilter">
+    <property name="title">
+     <string>Filters</string>
+    </property>
+    <addaction name="action_high_pass"/>
+    <addaction name="action_low_pass"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuDerp"/>
-   <addaction name="menuHerp"/>
+   <addaction name="menuFilter"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -118,12 +112,21 @@
   </action>
   <action name="action_update">
    <property name="text">
-    <string>Update</string>
+    <string>Refresh</string>
    </property>
   </action>
-  <action name="action_noise_lines">
+  <action name="action_resize">
    <property name="text">
-    <string>Lines</string>
+    <string>Resize</string>
+   </property>
+  </action>
+  <action name="action_save_as">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/save_file.svg</normaloff>:/vector/icons/save_file.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save As</string>
    </property>
   </action>
  </widget>
@@ -135,6 +138,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../res/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

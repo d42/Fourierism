@@ -42,39 +42,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>589</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>&amp;File</string>
-    </property>
-    <addaction name="action_open_file"/>
-    <addaction name="action_save_file"/>
-    <addaction name="action_save_as"/>
-   </widget>
-   <widget class="QMenu" name="menuFourier">
-    <property name="title">
-     <string>Fourier</string>
-    </property>
-    <addaction name="action_show_fourier"/>
-   </widget>
-   <widget class="QMenu" name="menuHistogram">
-    <property name="title">
-     <string>Histogram</string>
-    </property>
-    <addaction name="action_show_histogram"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuFourier"/>
-   <addaction name="menuHistogram"/>
-  </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="sizeGripEnabled">
     <bool>false</bool>
@@ -97,7 +64,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_open_file"/>
-   <addaction name="action_save_file"/>
    <addaction name="separator"/>
    <addaction name="action_show_histogram"/>
    <addaction name="action_show_fourier"/>
@@ -185,6 +151,5 @@
  </connections>
  <slots>
   <slot>on_subwindow_change(QMdiSubWindow*)</slot>
-  <slot>on_fourier_update(QObject*)</slot>
  </slots>
 </ui>
