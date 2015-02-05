@@ -14,15 +14,34 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="image_label">
-      <property name="text">
-       <string>TextLabel</string>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>507</width>
+         <height>306</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="image_label">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -33,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>523</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEffect">
@@ -48,11 +67,22 @@
     </property>
     <addaction name="action_save_as"/>
    </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="action_restore"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEffect"/>
+   <addaction name="menuImage"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_add_noise">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/noise.png</normaloff>:/vector/icons/noise.png</iconset>
+   </property>
    <property name="text">
     <string>Add noise</string>
    </property>
@@ -60,7 +90,7 @@
   <action name="action_save">
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/save_file.svg</normaloff>:/vector/icons/save_file.svg</iconset>
+     <normaloff>:/vector/icons/save_file.png</normaloff>:/vector/icons/save_file.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -69,10 +99,19 @@
   <action name="action_save_as">
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/save_file.svg</normaloff>:/vector/icons/save_file.svg</iconset>
+     <normaloff>:/vector/icons/save_file.png</normaloff>:/vector/icons/save_file.png</iconset>
    </property>
    <property name="text">
     <string>Save as</string>
+   </property>
+  </action>
+  <action name="action_restore">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/restore.png</normaloff>:/vector/icons/restore.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restore</string>
    </property>
   </action>
  </widget>

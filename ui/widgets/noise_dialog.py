@@ -1,7 +1,9 @@
-from itertools import product
+from itertools import product, zip_longest
+import math
 
-from PySide.QtGui import QDialog, QApplication, QPushButton, QWidget, QFileDialog, QImage, QDialogButtonBox, QPen, QBrush, QImage, QPixmap, QLabel
-from PySide.QtCore import Signal, Slot
+from PySide.QtGui import (QDialog, QWidget, QFileDialog, QImage,
+                          QDialogButtonBox, QPen, QBrush, QImage, QPixmap,
+                          QPainter)
 
 from ui.ui_noise_dialog import Ui_Dialog
 from ui.ui_noise_dialog_custom import Ui_Form as CustomLayoutSetup
@@ -16,7 +18,9 @@ class SubLayout(QWidget):
         super().__init__(parent)
         self.setupUi(self)
         self.setup_actions()
-        noise_brush = QBrush(QImage(":msadfsadfisc/noise.png"))
+
+    def setup_actions(self):
+        pass
 
 
 class CustomLayout(SubLayout, CustomLayoutSetup):
@@ -59,6 +63,8 @@ class SquaresLayout(SubLayout, SquaresLayoutSetup):
         opacity = settings['opacity']
         random = settings['random']
         sq_width, sq_height = settings['width'], settings['height']
+        # I'm not too fond of generating my own textures, because .setPixel
+        # performance gave me serious ptsd already.
         noise_brush = QBrush(QImage(":misc/noise.png"))
 
         def p(painter, color):
@@ -69,30 +75,33 @@ class SquaresLayout(SubLayout, SquaresLayoutSetup):
 
             for x, y in product(range(0, width, sq_width+spacing),
                                 range(0, height, sq_height+spacing)):
-                print(x, y, width, height)
                 brush = noise_brush if random else color
                 painter.fillRect(x, y, sq_width, sq_height, brush)
         return p
 
 
 class StripesLayout(SubLayout, StripesLayoutSetup):
-    def setup_actions(self):
-        pass
 
     @property
     def settings(self):
-        return {'thickness': self.slider_thickness.value()}
+        ang = (self.dial_angle.value() - 90) % 360
+
+        return {'thickness': self.slider_thickness.value(),
+                'angle': ang} # normalizing
 
     def gen_painter(self, settings):
         spacing = settings['spacing']
         thickness = settings['thickness']
         opacity = settings['opacity']
         random = settings['random']
+        angle = settings['angle']
+        angle = angle - 180 if (angle > 180) else angle
         noise_brush = QBrush(QImage(":misc/noise.png"))
 
         def p(painter, color):
             device = painter.device()
             width, height = device.width(), device.height()
+            painter.setRenderHint(QPainter.Antialiasing)
             pen = QPen()
             pen.setWidth(thickness)
             if random:
@@ -100,8 +109,23 @@ class StripesLayout(SubLayout, StripesLayoutSetup):
             painter.setPen(pen)
             painter.setOpacity(opacity/100)
 
-            for y in range(spacing+thickness, height, spacing+thickness):
-                painter.drawLine(0, y, width, y)
+            def getpoints(x, y):
+                if angle in [0, 180]:
+                    return (0, y), (width, y)
+                if angle in [90, 270]:
+                    return (x, 0), (x, height)
+                derp = max(height, width)
+                deg = math.radians(angle)
+                p1 = (x - derp*math.cos(deg), y + derp * math.sin(deg))
+                p2 = (x+derp*math.cos(deg), y - derp * math.sin(deg))
+                return p1, p2
+
+
+            for pos in range(spacing+thickness, max(height, width), spacing+thickness):
+                x = pos if angle < 90 else width-pos
+                y = pos
+                (x1, y1), (x2, y2) = getpoints(x, y)
+                painter.drawLine(x1, y1, x2, y2)
             return
         return p
 
@@ -172,14 +196,3 @@ class NoiseDialog(QDialog, Ui_Dialog):
     @property
     def painter_function(self):
         return self.layout.gen_painter(self.settings)
-
-
-def main():
-    import sys
-    app = QApplication(sys.argv)
-    n = NoiseDialog()
-    n.show()
-    app.exec_()
-
-if __name__ == '__main__':
-    main()

@@ -1,12 +1,20 @@
 <RCC>
   <qresource prefix="vector">
-    <file>icons/show_histogram.svg</file>
-    <file>icons/show_fourier.svg</file>
-    <file>icons/open_file.svg</file>
-    <file>icons/save_file.svg</file>
-    <file>cursors/magic_wand.svg</file>
+    <file>icons/email.png</file>
+    <file>icons/resize.png</file>
+    <file>icons/noise.png</file>
+    <file>icons/restore.png</file>
+    <file>icons/high_pass.png</file>
+    <file>icons/low_pass.png</file>
+    <file>icons/band_pass.png</file>
+    <file>icons/show_info.png</file>
+    <file>icons/show_histogram.png</file>
+    <file>icons/show_fourier.png</file>
+    <file>icons/open_file.png</file>
+    <file>icons/save_file.png</file>
   </qresource>
   <qresource prefix="misc">
+    <file>glider.png</file>
     <file>noise.png</file>
   </qresource>
 </RCC>

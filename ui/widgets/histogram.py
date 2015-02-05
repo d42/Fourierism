@@ -1,7 +1,5 @@
 import PySide
 import pyqtgraph as pg
-
-from PySide import QtGui, QtCore
 import numpy as np
 
 
@@ -14,8 +12,6 @@ class Histogram(pg.PlotWidget):
         self.setYRange(0, 1)
         self.setXRange(0, 255)
         self.pl = self.plot()
-        self.hideAxis('left')
-        self.hideAxis('bottom')
         self.setMouseEnabled(False, False)
         self.bp = pg.BarGraphItem(x=np.arange(256), width=0.5,
                                   height=[0]*256)
@@ -27,4 +23,6 @@ class Histogram(pg.PlotWidget):
         total = h * w
         values = np.bincount(image_array.flat, minlength=256)/total
         self.values = values
+        max_value = np.max(values)
         self.bp.setOpts(x=np.arange(256), width=0.5, height=values)
+        self.setYRange(0, max_value)

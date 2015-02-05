@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>530</width>
+    <height>446</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;style&gt;
+img {
+    vertical-align: middle;
+}
+&lt;/style&gt;
+&lt;div&gt;
+&lt;img style=&quot;float:left;&quot;src=&quot;:misc/glider.png&quot;&gt;&lt;p style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Foürierism&lt;/p&gt;
+&lt;p&gt; Version 0.2 (Much code, little time) &lt;/p&gt;
+&lt;/div&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>About</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&lt;div style=&quot;margin:  10px;&quot;&gt;
+
+&lt;p&gt;Foürierism - Fourier transform processor&lt;/p&gt;
+
+&lt;p&gt; (c) 2015 &lt;p&gt;
+
+&lt;a href=&quot;https://www.gnu.org/licenses/lgpl-2.1.html&quot;&gt;License: GNU Lesser General Public License Version 2 &lt;/a&gt;
+&lt;/div&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../res/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>Form</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>326</x>
+     <y>150</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

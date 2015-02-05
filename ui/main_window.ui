@@ -71,7 +71,7 @@
   <action name="action_open_file">
    <property name="icon">
     <iconset>
-     <normalon>:/vector/icons/open_file.svg</normalon>
+     <normalon>:/vector/icons/open_file.png</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -81,7 +81,7 @@
   <action name="action_save_file">
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/save_file.svg</normaloff>:/vector/icons/save_file.svg</iconset>
+     <normaloff>:/vector/icons/save_file.png</normaloff>:/vector/icons/save_file.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -109,7 +109,7 @@
    </property>
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/show_fourier.svg</normaloff>:/vector/icons/show_fourier.svg</iconset>
+     <normaloff>:/vector/icons/show_fourier.png</normaloff>:/vector/icons/show_fourier.png</iconset>
    </property>
    <property name="text">
     <string>Show Fourier</string>
@@ -121,10 +121,20 @@
    </property>
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/show_histogram.svg</normaloff>:/vector/icons/show_histogram.svg</iconset>
+     <normaloff>:/vector/icons/show_histogram.png</normaloff>:/vector/icons/show_histogram.png</iconset>
    </property>
    <property name="text">
     <string>Show Histogram</string>
+   </property>
+  </action>
+  <action name="action_show_info">
+   <property name="icon">
+    <iconset>
+     <normalon>:/vector/icons/show_info.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Show info</string>
    </property>
   </action>
  </widget>
@@ -136,20 +146,20 @@
    <sender>mdiArea</sender>
    <signal>subWindowActivated(QMdiSubWindow*)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_subwindow_change(QMdiSubWindow*)</slot>
+   <slot>on_mdiArea_subWindowActivated(QMdiSubWindow*)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>336</x>
-     <y>166</y>
+     <x>362</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>301</x>
-     <y>-3</y>
+     <x>364</x>
+     <y>-8</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>on_subwindow_change(QMdiSubWindow*)</slot>
+  <slot>on_mdiArea_subWindowActivated(QMdiSubWindow*)</slot>
  </slots>
 </ui>

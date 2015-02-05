@@ -3,14 +3,16 @@ from PySide.QtGui import QImage
 
 import exceptions as e
 from numpy.fft import fft2, fftshift, ifft2, ifftshift
-#from numpy.fft import rfft2, fftshift, irfft2, ifftshift
-#from scipy.fftpack import fft2, ifft2, fftshift, ifftshift, rfft2, irfft2
 
 
 def image_to_array(image, to_gray=False):
     """ :type image: QImage """
     if not image:
         return
+
+    if image.format() == QImage.Format_Indexed8: # Because 32 bit alignment sucks.
+        image = image.convertToFormat(QImage.Format_RGB32)
+
     bits = image.constBits()
     w, h = image.width(), image.height()
     array = np.frombuffer(bits, dtype=np.uint8).copy()
@@ -21,10 +23,11 @@ def image_to_array(image, to_gray=False):
         return array[0::4].reshape(h, w).copy()
 
 
-def array_to_image(array, real=False):
+def array_to_image(array):
     """ :type array: np.ndarray """
     if array.dtype != np.uint8:
         raise e.WrongArrayTypeException(array.dtype)
+
     h, w = array.shape
 
     array = array.astype(np.uint32)
@@ -35,7 +38,7 @@ def array_to_image(array, real=False):
 
 def rescale_array(array, scale_factor, max_value=255, dtype=np.uint8):
     scale_factor = scale_factor or np.max(array)
-    return ((array/scale_factor) * max_value).astype(dtype)
+    return ((array/scale_factor) * max_value).astype(dtype), scale_factor
 
 
 def descale_array(array, scale_factor, max_value=255):
@@ -44,11 +47,12 @@ def descale_array(array, scale_factor, max_value=255):
 
 
 def fft_to_array(fft):
-    return np.abs(ifft2(2**fft)).astype(np.uint8)
+    image = np.abs(ifft2(fft))
+    return image.clip(0, 255).astype(np.uint8)
 
 
 def array_to_fft(array):
-    return np.log2(fftshift(fft2(array)))
+    return fftshift(fft2(array))
 
 
 def zeropad(x, shape):

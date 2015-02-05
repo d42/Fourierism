@@ -1,6 +1,6 @@
 from PySide import QtGui
-from PySide.QtGui import (QMdiSubWindow, QImage, QPixmap, QWidget, qRgb)
-from PySide.QtCore import Qt, Signal, Slot
+from PySide.QtGui import QWidget
+from PySide.QtCore import Signal
 import numpy as np
 
 from ui.ui_histogram_window import Ui_HistogramWindow

@@ -5,17 +5,17 @@ from esky.bdist_esky import Executable
 # fine tuning.
 buildOptions = dict(
     includes = ['ui', 'scipy.special._ufuncs_cxx',
-        'matplotlib.backends.backend_qt4agg',
+        'matplotlib.backends.backend_qt4agg', 'atexit',
+        'matplotlib.backends.backend_tkagg',
         'scipy.sparse.csgraph._validation', 'pyqtgraph', 'pyqtgraph.graphicsItems.BarGraphItem',
         'scipy.integrate.vode', 'scipy.integrate.lsoda'],
-    excludes = ['tornado', 'IPython', 'PyQt5', 'webbrowser'],
+    excludes = ['tornado', 'IPython', 'PyQt5', 'PyQt4' 'webbrowser'],
     freezer_module="cx_freeze"
 )
 
-#data_files = [('loc', ['loc/pol.qm'])]
+data_files = [('.', ['icons_rc.py'])]
 
 import sys
-base = 'Win32GUI' if sys.platform == 'win32' else None
 suff = ".exe" if sys.platform == 'win32' else ""
 
 executables = [
@@ -35,5 +35,5 @@ setup(
     description='',
     options=dict(bdist_esky=buildOptions),
     scripts=executables,
-    #data_files=data_files,
+    data_files=data_files,
 )

@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
+    <width>535</width>
     <height>545</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -26,7 +26,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -34,13 +34,25 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="Fourier" name="fourier" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
       </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>531</width>
+         <height>504</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="Fourier" name="fourier" native="true"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -50,8 +62,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>525</width>
-     <height>25</height>
+     <width>535</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDerp">
@@ -60,7 +72,6 @@
     </property>
     <addaction name="action_restore"/>
     <addaction name="action_resize"/>
-    <addaction name="action_update"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -74,6 +85,7 @@
     </property>
     <addaction name="action_high_pass"/>
     <addaction name="action_low_pass"/>
+    <addaction name="action_band_pass"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuDerp"/>
@@ -91,21 +103,38 @@
    </attribute>
   </widget>
   <action name="action_high_pass">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/high_pass.png</normaloff>:/vector/icons/high_pass.png</iconset>
+   </property>
    <property name="text">
     <string>High pass</string>
    </property>
   </action>
   <action name="action_low_pass">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/low_pass.png</normaloff>:/vector/icons/low_pass.png</iconset>
+   </property>
    <property name="text">
     <string>Low pass</string>
    </property>
   </action>
   <action name="action_band_pass">
+   <property name="icon">
+    <iconset>
+     <normalon>:/vector/icons/band_pass.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Band pass</string>
    </property>
   </action>
   <action name="action_restore">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/restore.png</normaloff>:/vector/icons/restore.png</iconset>
+   </property>
    <property name="text">
     <string>Restore</string>
    </property>
@@ -116,6 +145,10 @@
    </property>
   </action>
   <action name="action_resize">
+   <property name="icon">
+    <iconset resource="../res/icons.qrc">
+     <normaloff>:/vector/icons/resize.png</normaloff>:/vector/icons/resize.png</iconset>
+   </property>
    <property name="text">
     <string>Resize</string>
    </property>
@@ -123,10 +156,15 @@
   <action name="action_save_as">
    <property name="icon">
     <iconset resource="../res/icons.qrc">
-     <normaloff>:/vector/icons/save_file.svg</normaloff>:/vector/icons/save_file.svg</iconset>
+     <normaloff>:/vector/icons/save_file.png</normaloff>:/vector/icons/save_file.png</iconset>
    </property>
    <property name="text">
     <string>Save As</string>
+   </property>
+  </action>
+  <action name="action_band_pass_2">
+   <property name="text">
+    <string>Band pass</string>
    </property>
   </action>
  </widget>

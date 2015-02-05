@@ -1,10 +1,5 @@
-from PySide import QtGui, QtCore
-
-from PySide.QtGui import (QMainWindow, QFileDialog, QMdiSubWindow, QPainter,
-                          QLabel, QPixmap, QToolButton, QWidget, QColor,
-                          QFrame, QWidgetAction, QDial)
-
-from PySide.QtCore import Qt, Signal
+from PySide.QtGui import QPainter, QColor, QFrame, QWidgetAction, QDial, QMenu
+from PySide.QtCore import Qt, Signal, QSize
 
 
 class QColorDial(QDial):
@@ -29,10 +24,11 @@ class ColorWidget(QFrame):
 
         action = QWidgetAction(self)
         action.setDefaultWidget(dial)
+        self.menu = QMenu()
+        self.menu.addAction(action)
 
-
-        self.addAction(action)
-        self.setContextMenuPolicy(Qt.ActionsContextMenu)
+        #self.addAction(action)
+        #self.setContextMenuPolicy(Qt.ActionsContextMenu)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -42,11 +38,10 @@ class ColorWidget(QFrame):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            print("clicked")
-            pass
+            self.menu.exec_(self.mapToGlobal(event.pos()))
 
     def sizeHint(self):
-        return QtCore.QSize(24, 20)
+        return QSize(24, 20)
 
     def set_color(self, color):
         self.color = QColor(color, color, color)
